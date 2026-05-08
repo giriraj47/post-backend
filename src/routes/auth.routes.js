@@ -7,10 +7,73 @@ const {
 const { authAdmin, authUser } = require("../middlewares/auth.middleware");
 const userModel = require("../models/user.model");
 
+const validate = require("../middlewares/validate.middleware");
+const { registerSchema, loginSchema } = require("../validators/auth.validator");
+
 const router = express.Router();
 
-router.post("/register", registerUser);
-router.post("/login", loginUser);
+/**
+ * @swagger
+ * /api/v1/auth/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - email
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               role:
+ *                 type: string
+ *                 enum: [user, admin]
+ *     responses:
+ *       201:
+ *         description: User registered successfully
+ *       409:
+ *         description: User already exists
+ *       400:
+ *         description: Validation failed
+ */
+router.post("/register", validate(registerSchema), registerUser);
+
+/**
+ * @swagger
+ * /api/v1/auth/login:
+ *   post:
+ *     summary: Login a user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User logged in successfully
+ *       401:
+ *         description: Invalid credentials
+ */
+router.post("/login", validate(loginSchema), loginUser);
 router.post("/logout", logoutUser);
 
 router.get("/getMe", authUser, async function getMe(req, res) {
