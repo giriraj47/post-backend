@@ -5,6 +5,7 @@ const {
   logoutUser,
 } = require("../controllers/auth.controller");
 const { authAdmin, authUser } = require("../middlewares/auth.middleware");
+const userModel = require("../models/user.model");
 
 const router = express.Router();
 
@@ -12,7 +13,7 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 
-router.get("/getMe", authUser, authAdmin, async function getMe(req, res) {
+router.get("/getMe", authUser, authAdmin,uth async function getMe(req, res) {
   try {
     // req.user should be set by auth middleware
     const userId = req.user.id;
