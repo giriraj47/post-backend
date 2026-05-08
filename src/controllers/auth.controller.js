@@ -83,7 +83,7 @@ async function loginUser(req, res) {
     user: {
       id: user._id,
       username: user.username,
-      emial: user.emial,
+      email: user.email,
       role: user.role,
     },
   });
